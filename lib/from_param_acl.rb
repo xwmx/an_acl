@@ -60,10 +60,10 @@ module FromParamAcl
   end
   
   module FinderFilters
-    # Use as a before filter to get object for the resource if current_person
+    # Use as a before filter to get object for the resource if current_user
     # has the necessary permissions.
     def get_from_param_for
-      instance_variable_set("@#{self.controller_name.singularize}", self.controller_name.classify.constantize.from_param_for(current_person, params[:action], params[:id]))
+      instance_variable_set("@#{self.controller_name.singularize}", self.controller_name.classify.constantize.from_param_for(current_user, params[:action], params[:id]))
     end
     
     # Use as a before filter to get object for the resource without checking
@@ -102,15 +102,15 @@ module FromParamAcl
 
         case params[:action]
         when "index"
-          klass.is_readable_by?(*[current_person, @context].compact)
+          klass.is_readable_by?(*[current_user, @context].compact)
         when "show"
-          object && object.is_readable_by?(current_person)
+          object && object.is_readable_by?(current_user)
         when "new", "create"
-          klass.is_creatable_by?(*[current_person, @context].compact)
+          klass.is_creatable_by?(*[current_user, @context].compact)
         when "edit", "update"
-          object && object.is_updatable_by?(current_person)
+          object && object.is_updatable_by?(current_user)
         when "destroy"
-          object && object.is_deletable_by?(current_person)
+          object && object.is_deletable_by?(current_user)
         end
       end
   end

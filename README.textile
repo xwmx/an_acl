@@ -1,5 +1,4 @@
 h1. FromParamAcl
-============
 
 A restful access control layer for Ruby on Rails that accounts for context-based permissions and incorporates finder filters for permalinked resources.
 
