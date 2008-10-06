@@ -10,7 +10,7 @@ module FromParamAcl
       
       # Passes to find_by_id by default, but will search using a permalink_field if specified in the model.
       def from_param(*options)
-        permalink_field.nil? ? find_by_id(*options) : send(:"find_by_#{permalink_field}", *options)
+        respond_to?(:permalink_field) && !permalink_field.nil? ? send(:"find_by_#{permalink_field}", *options) : find_by_id(*options)
       end
     
       # Returns an object using ActiveRecord::Base#from_param if agent meets requirements for the 
