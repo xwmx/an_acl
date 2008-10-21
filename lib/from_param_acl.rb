@@ -10,19 +10,23 @@ module FromParamAcl
       
       # Passes to find_by_id by default, but will search using a permalink_field if specified in the model.
       def from_param(*options)
-        respond_to?(:permalink_field) && !permalink_field.nil? ? send(:"find_by_#{permalink_field}", *options) : find_by_id(*options)
+        if respond_to?(:permalink_field) && !permalink_field.nil?
+          send(:"find_by_#{permalink_field}", *options)
+        else
+          find_by_id(*options)
+        end
       end
-    
+      
       # Returns an object using ActiveRecord::Base#from_param if agent meets requirements for the 
       # specified action as defined by the model.
       def from_param_for(agent, action = nil, *options)
         case action
         when "show"
-          (object = self.from_param(*options)).is_readable_by?(agent) ? object : nil
+          (object = self.from_param(*options) or raise ActiveRecord::RecordNotFound).is_readable_by?(agent) ? object : nil
         when "edit", "update"
-          (object = self.from_param(*options)).is_updatable_by?(agent) ? object : nil
+          (object = self.from_param(*options) or raise ActiveRecord::RecordNotFound).is_updatable_by?(agent) ? object : nil
         when "destroy", nil
-          (object = self.from_param(*options)).is_deletable_by?(agent) ? object : nil
+          (object = self.from_param(*options) or raise ActiveRecord::RecordNotFound).is_deletable_by?(agent) ? object : nil
         end
       end
       
