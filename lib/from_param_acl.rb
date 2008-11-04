@@ -20,13 +20,11 @@ module FromParamAcl
       # Returns an object using ActiveRecord::Base#from_param if agent meets requirements for the 
       # specified action as defined by the model.
       def from_param_for(agent, action = nil, *options)
-        case action
-        when "show"
-          (object = self.from_param(*options) or raise ActiveRecord::RecordNotFound).is_readable_by?(agent) ? object : nil
-        when "edit", "update"
-          (object = self.from_param(*options) or raise ActiveRecord::RecordNotFound).is_updatable_by?(agent) ? object : nil
-        when "destroy", nil
-          (object = self.from_param(*options) or raise ActiveRecord::RecordNotFound).is_deletable_by?(agent) ? object : nil
+        object = self.from_param(*options) or raise ActiveRecord::RecordNotFound
+        if object.permits_for?(agent, action)
+          object
+        else
+          nil
         end
       end
       
@@ -61,6 +59,19 @@ module FromParamAcl
     def is_deletable_by?(agent = nil)
       is_updatable_by?(agent)
     end
+    
+    # Check object permissions by action.
+    def permits_for?(agent, action = nil)
+      case action
+      when "show"
+        is_readable_by?(agent)
+      when "edit", "update"
+        is_updatable_by?(agent)
+      when "destroy", nil
+        is_deletable_by?(agent)
+      end
+    end
+    
   end
   
   module FinderFilters
