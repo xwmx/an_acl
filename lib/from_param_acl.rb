@@ -13,7 +13,7 @@ module FromParamAcl
         if respond_to?(:permalink_field) && !permalink_field.nil?
           send(:"find_by_#{permalink_field}", *options)
         else
-          find_by_id(*options)
+          find(*options)
         end
       end
       
