@@ -8,10 +8,10 @@ module FromParamAcl
     
     module ClassMethods
       
-      # Passes to find_by_id by default, but will search using a permalink_field if specified in the model.
+      # Passes to find_by_id by default, but will search using a from_param_field if specified in the model.
       def from_param(*options)
-        if respond_to?(:permalink_field) && !permalink_field.nil?
-          send(:"find_by_#{permalink_field}", *options)
+        if respond_to?(:from_param_field) && !from_param_field.nil?
+          send(:"find_by_#{from_param_field.to_s}", *options)
         else
           find(*options)
         end
