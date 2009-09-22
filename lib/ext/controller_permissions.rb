@@ -27,7 +27,7 @@ module FromParamAcl
           klass = self.controller_name.classify.constantize
           object = instance_variable_get("@#{self.controller_name.singularize}")
       
-          case params[:action]
+          case action_name
           when "index"
             klass.is_readable_by?(current_user, current_context)
           when "show"
