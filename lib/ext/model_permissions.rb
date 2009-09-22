@@ -1,5 +1,5 @@
 module FromParamAcl
-  module Extensions
+  module Ext
     module ModelPermissions
       def self.included(base)
         base.extend ClassMethods

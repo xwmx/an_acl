@@ -1,5 +1,5 @@
 module FromParamAcl
-  module Extensions
+  module Ext
     module ControllerPermissions
         # Use as a before filter in controllers. Uses default permitted?
         # or the version of permitted? defined locally within a controller.

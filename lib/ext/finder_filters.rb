@@ -1,5 +1,5 @@
 module FromParamAcl
-  module Extensions
+  module Ext
     module FinderFilters
       # Use as a before filter to get object for the resource if current_user
       # has the necessary permissions.
