@@ -3,14 +3,21 @@ module FromParamAcl
     module ControllerPermissions
         # Use as a before filter in controllers. Uses default permitted?
         # or the version of permitted? defined locally within a controller.
+        # Requires that the controller implements two methods:
+        #  * logged_in? returns true or false
+        #  * login_required => behavior for when logged_in? returns false
+        # If permitted? false, 403 header is sent and 'Not Permitted'
+        # text is rendered.
         def permission_required
           unless permitted?
             unless logged_in?
               login_required
             else
               respond_to do |format|
-                format.html { redirect_to(PERMISSION_DENIED_REDIRECTION) }
-                format.xml  { render :nothing => true, :status => 401 }
+                format.html {
+                  render :text => 'Not Permitted',
+                  :status => :forbidden
+                }
               end
             end
           end
