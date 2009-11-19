@@ -1,11 +1,6 @@
 module FromParamAcl
   module ActionController
     module FinderFilters
-      # Use as a before filter to get object for the resource if current_user
-      # has the necessary permissions.
-      def get_from_param_for
-        instance_variable_set("@#{obj_name}", current_model.from_param_for(current_user, action_name, params[:id]))
-      end
 
       # Use as a before filter to get object for the resource without checking
       # permissions.
