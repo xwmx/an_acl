@@ -31,20 +31,17 @@ module FromParamAcl
         # expects the existence of instance variable using the singular name of 
         # the current resource.
         def permitted?
-          klass = self.controller_name.classify.constantize
-          object = instance_variable_get("@#{self.controller_name.singularize}")
-      
           case action_name
           when "index"
-            klass.is_readable_by?(current_user, current_context)
+            current_model.is_readable_by?(current_user, current_context)
           when "show"
-            object && object.is_readable_by?(current_user)
+            current_object && current_object.is_readable_by?(current_user)
           when "new", "create"
-            klass.is_creatable_by?(current_user, current_context)
+            current_model.is_creatable_by?(current_user, current_context)
           when "edit", "update"
-            object && object.is_updatable_by?(current_user)
+            current_object && current_object.is_updatable_by?(current_user)
           when "destroy"
-            object && object.is_deletable_by?(current_user)
+            current_object && current_object.is_deletable_by?(current_user)
           end
         end
       
@@ -52,6 +49,14 @@ module FromParamAcl
         # to provide a context for class-level permissions.
         def current_context
           @context
+        end
+        
+        def current_model
+          self.controller_name.classify.constantize
+        end
+        
+        def current_object
+          instance_variable_get("@#{self.controller_name.singularize}")
         end
     end
   end

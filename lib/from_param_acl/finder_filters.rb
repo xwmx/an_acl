@@ -4,13 +4,13 @@ module FromParamAcl
       # Use as a before filter to get object for the resource if current_user
       # has the necessary permissions.
       def get_from_param_for
-        instance_variable_set("@#{obj_name}", obj_class.from_param_for(current_user, action_name, params[:id]))
+        instance_variable_set("@#{obj_name}", current_model.from_param_for(current_user, action_name, params[:id]))
       end
 
       # Use as a before filter to get object for the resource without checking
       # permissions.
       def get_from_param
-        instance_variable_set("@#{obj_name}", obj_class.from_param(params[:id]))
+        instance_variable_set("@#{obj_name}", current_model.from_param(params[:id]))
       end
     
     protected
@@ -19,7 +19,7 @@ module FromParamAcl
         self.controller_name.singularize
       end
       
-      def obj_class
+      def current_model
         self.controller_name.classify.constantize
       end
     end
