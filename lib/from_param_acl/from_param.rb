@@ -14,7 +14,7 @@ module FromParamAcl
       # specified action as defined by the model.
       def from_param_for(agent, action = nil, *options)
         object = self.from_param(*options) or raise ActiveRecord::RecordNotFound
-        if object.permits_for?(agent, action)
+        if object.respond_to?(:permits_for?) && object.permits_for?(agent, action)
           object
         else
           nil
