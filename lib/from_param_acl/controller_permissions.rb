@@ -1,6 +1,6 @@
 module FromParamAcl
-  module Ext
-    module ControllerPermissions
+  module ActionController
+    module Permissions
         # Use as a before filter in controllers. Uses default permitted?
         # or the version of permitted? defined locally within a controller.
         # Requires that the controller implements two methods:

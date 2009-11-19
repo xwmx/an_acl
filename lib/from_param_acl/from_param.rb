@@ -1,5 +1,5 @@
 module FromParamAcl
-  module Ext
+  module ActiveRecord
     module FromParam
       def self.included(base)
         base.extend ClassMethods
