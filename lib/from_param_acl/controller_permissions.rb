@@ -1,6 +1,7 @@
 module FromParamAcl
   module ActionController
     module Permissions
+                  
       # Use as a before filter in controllers. Uses default permitted?
       # or the version of permitted? defined locally within a controller.
       # Requires that the controller implements two methods:
@@ -24,24 +25,52 @@ module FromParamAcl
       end
     
     protected
-    
-      # Override in controller to have custom permissions for the resource.
-      # If permissions are dependent on context, override the current_context
-      # method or assign a value to an @context variable. On object actions, 
-      # expects the existence of instance variable using the singular name of 
-      # the current resource.
+      
       def permitted?
-        case action_name
-        when "index"
-          current_model.is_readable_by?(current_user, current_context)
-        when "show"
-          current_object && current_object.is_readable_by?(current_user)
-        when "new", "create"
-          current_model.is_creatable_by?(current_user, current_context)
-        when "edit", "update"
-          current_object && current_object.is_updatable_by?(current_user)
-        when "destroy"
-          current_object && current_object.is_deletable_by?(current_user)
+        !!test_permissions(action_tests)
+      end
+      
+      # Override in controller to have custom permissions for the resource.
+      # The method should return a hash of with action names for keys pointing 
+      # to boolean-returning procs or booleans. To preserve default tests simply
+      # merge the new hash with `default_action_tests` when overriding the
+      # method.
+      def action_tests
+        default_action_tests
+      end
+      
+      def default_action_tests
+        HashWithIndifferentAccess.new(
+          :index    => lambda {
+            current_model.is_readable_by?(current_user, current_context)
+          },
+          :show     => lambda {
+            current_object && current_object.is_readable_by?(current_user)
+          },
+          :new      => lambda {
+            current_model.is_creatable_by?(current_user, current_context)
+          },
+          :create   => lambda {
+            current_model.is_creatable_by?(current_user, current_context)
+          },
+          :edit     => lambda {
+            current_object && current_object.is_updatable_by?(current_user)
+          },
+          :update   => lambda {
+            current_object && current_object.is_updatable_by?(current_user)
+          },
+          :destroy  => lambda {
+            current_object && current_object.is_deletable_by?(current_user)
+          }
+        )
+      end
+      
+      def test_permissions(tests)
+        test = tests[action_name]
+        if test.respond_to?(:call)
+          test.call
+        else
+          test
         end
       end
     
