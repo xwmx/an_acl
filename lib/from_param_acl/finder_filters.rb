@@ -15,3 +15,7 @@ module FromParamAcl
     end
   end
 end
+
+ActionController::Base.class_eval do
+  include FromParamAcl::ActionController::FinderFilters
+end
