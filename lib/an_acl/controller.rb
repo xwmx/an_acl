@@ -32,27 +32,27 @@ protected
   
   def default_action_tests
     HashWithIndifferentAccess.new(
-      :index    => lambda {
+      :index    => lambda do
         current_model.is_readable_by?(current_user, current_context)
-      },
-      :show     => lambda {
-        current_object && current_object.is_readable_by?(current_user)
-      },
-      :new      => lambda {
+      end,
+      :show     => lambda do
+        current_object.is_readable_by?(current_user)
+      end,
+      :new      => lambda do
         current_model.is_creatable_by?(current_user, current_context)
-      },
-      :create   => lambda {
+      end,
+      :create   => lambda do
         current_model.is_creatable_by?(current_user, current_context)
-      },
-      :edit     => lambda {
-        current_object && current_object.is_updatable_by?(current_user)
-      },
-      :update   => lambda {
-        current_object && current_object.is_updatable_by?(current_user)
-      },
-      :destroy  => lambda {
-        current_object && current_object.is_deletable_by?(current_user)
-      }
+      end,
+      :edit     => lambda do
+        current_object.is_updatable_by?(current_user)
+      end,
+      :update   => lambda do
+        current_object.is_updatable_by?(current_user)
+      end,
+      :destroy  => lambda do
+        current_object.is_deletable_by?(current_user)
+      end
     )
   end
   
