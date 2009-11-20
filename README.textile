@@ -1,6 +1,6 @@
 h1. An ACL
 
-A restful access control layer for Ruby on Rails that accounts for context-based permissions.
+A REST-centric ACL for Ruby on Rails that accounts for context-based permissions.
 
 
 
