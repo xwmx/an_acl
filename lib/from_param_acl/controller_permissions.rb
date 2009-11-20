@@ -4,9 +4,6 @@ module FromParamAcl
                   
       # Use as a before filter in controllers. Uses default permitted?
       # or the version of permitted? defined locally within a controller.
-      # Requires that the controller implements two methods:
-      #  * logged_in? returns true or false
-      #  * login_required => behavior for when logged_in? returns false
       # If permitted? false, 403 header is sent and 'Not Permitted'
       # text is rendered.
       def permission_required
@@ -22,6 +19,7 @@ module FromParamAcl
     
     protected
       
+      # Returns a boolean. Can override to completely ignore per-action tests.
       def permitted?
         !!test_permissions(action_tests)
       end
