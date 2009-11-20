@@ -1,6 +1,6 @@
 require 'test/unit'
 
-class FromParamAclTest < Test::Unit::TestCase
+class AnAclTest < Test::Unit::TestCase
   # Replace this with your real tests.
   test "the truth" do
     assert true

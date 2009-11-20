@@ -1,1 +1,1 @@
-require 'from_param_acl'
+require 'an_acl'
