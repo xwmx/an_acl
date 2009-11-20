@@ -7,7 +7,7 @@ module FromParamAcl
       # If permitted? false, 403 header is sent and 'Not Permitted'
       # text is rendered.
       def permission_required
-        unless current_user && permitted?
+        unless permitted?
           respond_to do |format|
             format.html {
               render :text => 'Not Permitted',
